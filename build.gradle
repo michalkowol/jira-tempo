@@ -1,0 +1,60 @@
+buildscript {
+    ext.kotlin_version = '1.1-M04'
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven { url 'http://dl.bintray.com/kotlin/kotlin-eap-1.1' }
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'application'
+
+defaultTasks 'run'
+
+mainClassName = 'pl.michalkowol.BootKt'
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+}
+
+task fatJar(type: Jar) {
+    baseName = "${project.name}-assembly"
+    manifest = jar.manifest
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven { url 'http://dl.bintray.com/kotlin/kotlin-eap-1.1' }
+    maven { url 'http://dl.bintray.com/kotlin/kotlinx.coroutines' }
+}
+
+sourceSets {
+    main.kotlin.srcDirs += 'src/main/kotlin'
+    test.kotlin.srcDirs += 'test/main/kotlin'
+    main.java.srcDirs += 'src/main/kotlin'
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile 'org.slf4j:slf4j-api:1.7.22'
+    compile 'ch.qos.logback:logback-classic:1.1.8'
+
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-generate:0.2-beta'
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-async:0.2-beta'
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-rx:0.2-beta'
+
+    testCompile('junit:junit:4.12')
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.3'
+}
