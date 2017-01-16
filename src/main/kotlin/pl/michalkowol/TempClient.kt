@@ -22,7 +22,7 @@ class TempoClient(private val httpClient: HttpClient) {
             {
                 "timeSpentSeconds": ${task.timeInSec},
                 "dateStarted": "${task.date}T00:00:00.000",
-                "comment": "${task.comment?.replace("\"", "\\\"")}",
+                "comment": "${task.comment}",
                 "remainingEstimateSeconds": 0,
                 "author": {
                     "name": "$username"
