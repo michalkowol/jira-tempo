@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-class TaskFactorySpec {
+class TaskCsvFactorySpec {
 
     @Test
     @DisplayName("it should parse one line in csv to task")
@@ -43,21 +43,6 @@ class TaskFactorySpec {
         val task = TaskCsvFactory().fromRow(row)
         // then
         assertEquals("WTAI-123", task.key)
-        assertEquals("comment ok", task.comment)
-
-        assertEquals("2016-08-26", task.date)
-        assertEquals(600, task.timeInSec)
-    }
-
-    @Test
-    @DisplayName("it should parse line with key as empty value")
-    fun withoutKey() {
-        // given
-        val row = "\tcomment ok\t2016-08-26\t600"
-        // when
-        val task = TaskCsvFactory().fromRow(row)
-        // then
-        assertEquals(null, task.key)
         assertEquals("comment ok", task.comment)
 
         assertEquals("2016-08-26", task.date)

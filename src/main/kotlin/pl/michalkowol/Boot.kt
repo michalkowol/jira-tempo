@@ -42,9 +42,7 @@ class Boot(private val taskCsvFactory: TaskCsvFactory, private val asyncHttpClie
         val auth = request.headers("Authorization")
         val (username, password) = HttpHeader.basicAuth(auth)
         val tasks = taskCsvFactory.fromCsv(csv)
-        tasks.forEach {
-            tempo.logTasks(username, password, tasks)
-        }
+        tempo.logTasks(username, password, tasks)
     }
 
     private fun shutdown(request: Request, response: Response) {
