@@ -32,6 +32,11 @@ task fatJar(type: Jar) {
     with jar
 }
 
+task stage(dependsOn: ['fatJar', 'build', 'clean'])
+build.mustRunAfter clean
+fatJar.mustRunAfter build
+stage.dependsOn(fatJar)
+
 repositories {
     jcenter()
     mavenCentral()

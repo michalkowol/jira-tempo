@@ -19,7 +19,7 @@ class Boot(private val taskCsvFactory: TaskCsvFactory, private val asyncHttpClie
     private val log = LoggerFactory.getLogger(Boot::class.java)
 
     fun start() {
-        port(8081)
+        port(assignedPort())
         post("/parse", this::parse)
         delete("/worklog", this::delete)
         post("/worklog", this::createWorklog)
@@ -57,5 +57,13 @@ class Boot(private val taskCsvFactory: TaskCsvFactory, private val asyncHttpClie
         val ids = request.body().lines().map(Integer::parseInt)
         ids.forEach { tempo.delete(username, password, it) }
         return "Deleted ${ids.size} tasks"
+    }
+
+    fun assignedPort(): Int {
+        val processBuilder = ProcessBuilder()
+        if (processBuilder.environment()["PORT"] != null) {
+            return Integer.parseInt(processBuilder.environment()["PORT"])
+        }
+        return 4567
     }
 }
