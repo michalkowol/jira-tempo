@@ -64,6 +64,6 @@ class Boot(private val taskCsvFactory: TaskCsvFactory, private val asyncHttpClie
         if (processBuilder.environment()["PORT"] != null) {
             return Integer.parseInt(processBuilder.environment()["PORT"])
         }
-        return 4567
+        return 8080
     }
 }
