@@ -39,6 +39,14 @@ gradle fatJar
 java -jar build/libs/${NAME}-assembly-${VERSION}.jar
 ```
 
+### Heroku
+
+```
+heroku login
+heroku create
+git push heroku master
+```
+
 ## Examples
 
 ### Create workflows
