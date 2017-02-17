@@ -1,5 +1,10 @@
 package pl.michalkowol
 
+import com.softwareberg.HttpClient
+import com.softwareberg.HttpHeader
+import com.softwareberg.HttpMethod.DELETE
+import com.softwareberg.HttpMethod.POST
+import com.softwareberg.HttpRequest
 import org.slf4j.LoggerFactory
 import java.net.HttpURLConnection
 
@@ -9,7 +14,7 @@ class TempoClient(private val httpClient: HttpClient) {
 
     fun delete(username: String, password: String, workflowId: Int): Int {
         val basicAuthHeader = HttpHeader.basicAuth(username, password)
-        val response = httpClient.execute(HttpRequest(HttpMethod.DELETE, "https://jira.mtvi.com/rest/tempo-timesheets/3/worklogs/$workflowId", listOf(basicAuthHeader)))
+        val response = httpClient.execute(HttpRequest(DELETE, "https://jira.mtvi.com/rest/tempo-timesheets/3/worklogs/$workflowId", listOf(basicAuthHeader)))
         if (response.statusCode != HttpURLConnection.HTTP_OK) {
             throw Exception("Cannot delete task with worklog [id=$workflowId]")
         } else {
@@ -34,7 +39,7 @@ class TempoClient(private val httpClient: HttpClient) {
         val basicAuthHeader = HttpHeader.basicAuth(username, password)
         val contentType = HttpHeader("Content-Type", "application/json")
         val headers = listOf(basicAuthHeader, contentType)
-        val createRequest = HttpRequest(HttpMethod.POST, "https://jira.mtvi.com/rest/tempo-timesheets/3/worklogs", headers, body)
+        val createRequest = HttpRequest(POST, "https://jira.mtvi.com/rest/tempo-timesheets/3/worklogs", headers, body)
         log.debug("Request: {}", createRequest)
         val response = httpClient.execute(createRequest)
         if (response.statusCode != HttpURLConnection.HTTP_OK) {

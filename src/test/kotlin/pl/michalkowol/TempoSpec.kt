@@ -3,9 +3,8 @@ package pl.michalkowol
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
+import org.junit.Assert.assertEquals
+import org.junit.Test
 
 class TempoSpec {
 
@@ -14,8 +13,7 @@ class TempoSpec {
     private val taskC = Task("C", "desc C", "2017-01-19", 300)
 
     @Test
-    @DisplayName("it should log all worklogs with key")
-    fun withKeys() {
+    fun `it should log all worklogs with key`() {
         // given
         val username = "user"
         val password = "pass"

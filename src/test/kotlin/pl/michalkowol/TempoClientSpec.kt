@@ -3,15 +3,15 @@ package pl.michalkowol
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
+import com.softwareberg.HttpClient
+import com.softwareberg.HttpResponse
+import org.junit.Assert.assertEquals
+import org.junit.Test
 
 class TempoClientSpec {
 
     @Test
-    @DisplayName("it should delete task by id")
-    fun delete() {
+    fun `it should delete task by id`() {
         // given
         val username = "user"
         val password = "pass"
@@ -26,8 +26,7 @@ class TempoClientSpec {
     }
 
     @Test
-    @DisplayName("it should create new task")
-    fun create() {
+    fun `it should create new task`() {
         // given
         val username = "user"
         val password = "password"
