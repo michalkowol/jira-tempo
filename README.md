@@ -45,6 +45,7 @@ java -jar build/libs/${NAME}-assembly-${VERSION}.jar
 heroku login
 heroku create
 git push heroku master
+heroku logs -t
 ```
 
 ## Examples
@@ -83,12 +84,6 @@ Authorization: Basic XXX
 993637
 993640
 9936411
-```
-
-### Stop
-
-```
-POST localhost:8081/stop
 ```
 
 ## JIRA Tempo
