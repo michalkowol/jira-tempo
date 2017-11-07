@@ -5,6 +5,9 @@ import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import pl.michalkowol.jira.Task
+import pl.michalkowol.jira.Tempo
+import pl.michalkowol.jira.TempoClient
 
 class TempoSpec {
 
@@ -23,7 +26,7 @@ class TempoSpec {
         }
         val tempo = Tempo(tempoClient)
         // when
-        val tasksIds = tempo.logAllTasksWithKeys(username, password, tasks)
+        val tasksIds = tempo.logTasks(username, password, tasks)
         // then
         assertEquals(3, tasksIds.size)
         assertEquals(200, tasksIds[0])

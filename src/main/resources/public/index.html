@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tempo</title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <style>
+    .cl3-btn {
+      min-width: 150px;
+    }
+    .glyphicon-refresh-animate {
+      -animation: spin .7s infinite linear;
+      -webkit-animation: spin2 .7s infinite linear;
+    }
+
+    @-webkit-keyframes spin2 {
+      from { -webkit-transform: rotate(0deg);}
+      to { -webkit-transform: rotate(360deg);}
+    }
+
+    @keyframes spin {
+      from { transform: scale(1) rotate(0deg);}
+      to { transform: scale(1) rotate(360deg);}
+    }
+  </style>
+
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h2>Tempo</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <form id="jiraForm" onsubmit="return false;">
+          <div class="form-group">
+            <label for="username">Username:</label>
+            <input name="username" class="form-control" id="username">
+          </div>
+          <div class="form-group">
+            <label for="pwd">Password:</label>
+            <input name="password" type="password" class="form-control" id="pwd">
+          </div>
+          <div class="form-group">
+            <label for="tasks">Tasks:</label>
+            <textarea name="tasks" class="form-control" rows="10" id="tasks"></textarea>
+          </div>
+          <button class="btn cl3-btn btn-primary" onclick="createTempo()"><span id="form-convert-animation" class="glyphicon glyphicon-refresh glyphicon-refresh-animate" style="display: none"></span> <span id="form-convert-text">Submit</span></button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script>
+    function createTempo() {
+      var $animation = $('#form-convert-animation');
+      var $btnText = $('#form-convert-text');
+      $animation.show();
+      $btnText.text('Sending...');
+
+      var input = $('#jiraForm').serialize();
+      jQuery.ajax({
+        url: "/worklogFromForm",
+        method: "POST",
+        data: input
+      }).always(function () {
+        $animation.hide();
+        $btnText.text('Submit');
+      }).fail(function () {
+        alert("Error on sending...")
+      });
+    }
+  </script>
+</body>
+</html>

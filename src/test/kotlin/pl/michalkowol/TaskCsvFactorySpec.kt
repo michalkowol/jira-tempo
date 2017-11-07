@@ -2,6 +2,7 @@ package pl.michalkowol
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import pl.michalkowol.jira.TaskCsvFactory
 
 class TaskCsvFactorySpec {
 
@@ -10,7 +11,7 @@ class TaskCsvFactorySpec {
         // given
         val row = "WTAI-123\tcomment ok\t2016-08-26\t600"
         // when
-        val task = TaskCsvFactory().fromRow(row)
+        val task = TaskCsvFactory().fromCsv(row).first()
         // then
         assertEquals("WTAI-123", task.key)
         assertEquals("comment ok", task.comment)
@@ -23,7 +24,7 @@ class TaskCsvFactorySpec {
         // given
         val row = "WTAI-123\tcomment, ok\t2016-08-26\t600"
         // when
-        val task = TaskCsvFactory().fromRow(row)
+        val task = TaskCsvFactory().fromCsv(row).first()
         // then
         assertEquals("WTAI-123", task.key)
         assertEquals("comment, ok", task.comment)
@@ -36,7 +37,7 @@ class TaskCsvFactorySpec {
         // given
         val row = "WTAI-123\tcomment ok\t2016-08-26\t600\textra"
         // when
-        val task = TaskCsvFactory().fromRow(row)
+        val task = TaskCsvFactory().fromCsv(row).first()
         // then
         assertEquals("WTAI-123", task.key)
         assertEquals("comment ok", task.comment)
@@ -50,7 +51,7 @@ class TaskCsvFactorySpec {
         // given
         val row = "WTAI-681 WTAI-428\tcomment ok\t2016-08-26\t600"
         // when
-        val task = TaskCsvFactory().fromRow(row)
+        val task = TaskCsvFactory().fromCsv(row).first()
         // then
         assertEquals("WTAI-681", task.key)
         assertEquals("comment ok", task.comment)

@@ -7,6 +7,9 @@ import com.softwareberg.HttpClient
 import com.softwareberg.HttpResponse
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import pl.michalkowol.jira.Task
+import pl.michalkowol.jira.TempoClient
+import java.util.concurrent.CompletableFuture
 
 class TempoClientSpec {
 
@@ -41,6 +44,6 @@ class TempoClientSpec {
     }
 
     private fun createHttpClientMock(): HttpClient = mock {
-        on { execute(any()) } doReturn HttpResponse(200)
+        on { execute(any()) } doReturn CompletableFuture.completedFuture(HttpResponse(200))
     }
 }

@@ -1,17 +1,9 @@
-buildscript {
-    ext.kotlin_version = '1.1.0-beta-18'
-    repositories {
-        mavenCentral()
-        jcenter()
-        maven { url 'http://dl.bintray.com/kotlin/kotlin-eap-1.1' }
-    }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.1.51'
+    id 'com.github.ben-manes.versions' version '0.17.0'
 }
 
 apply plugin: 'java'
-apply plugin: 'kotlin'
 apply plugin: 'application'
 apply plugin: 'jacoco'
 
@@ -31,48 +23,80 @@ task fatJar(type: Jar) {
     with jar
 }
 
+sourceSets {
+    integrationTest {
+        kotlin {
+            srcDirs += 'src/it/kotlin'
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+        }
+        resources.srcDirs += 'src/it/resources'
+    }
+}
+
+task integrationTest(group: 'verification', type: Test, description: 'Runs integration tests.') {
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
+configurations {
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
+}
+
 task stage(dependsOn: ['fatJar', 'build', 'clean'])
 build.mustRunAfter clean
 fatJar.mustRunAfter build
 stage.dependsOn(fatJar)
 
+jacoco {
+    toolVersion = '0.7.10-SNAPSHOT'
+}
+
 jacocoTestReport {
     reports {
-        xml.enabled false
         csv.enabled false
-        html.destination "${buildDir}/jacocoHtml"
+        html.enabled true
+        xml.enabled true
     }
     dependsOn test
 }
 
 repositories {
-    jcenter()
     mavenCentral()
-    maven { url 'http://dl.bintray.com/kotlin/kotlin-eap-1.1' }
+    jcenter()
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     maven { url 'http://dl.bintray.com/kotlin/kotlinx.coroutines' }
     maven { url 'https://jitpack.io' }
 }
 
-sourceSets {
-    main.kotlin.srcDirs += 'src/main/kotlin'
-    test.kotlin.srcDirs += 'test/main/kotlin'
-    main.java.srcDirs += 'src/main/kotlin'
-}
-
 dependencies {
-    ext.kotlinxcoroutines = '0.8-beta'
+    ext.kotlinxcoroutines = '0.19.3'
+    ext.rinca = '0.6.1'
 
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile 'org.slf4j:slf4j-api:1.7.22'
-    compile 'ch.qos.logback:logback-classic:1.1.8'
+    compile 'org.slf4j:slf4j-api:1.7.25'
+    compile 'ch.qos.logback:logback-classic:1.2.3'
 
-    compile 'com.sparkjava:spark-core:2.5.4'
-    compile 'com.github.softwareberg:httpclient:0.1.+'
+    compile 'com.sparkjava:spark-core:2.6.0'
+    compile 'com.google.inject:guice:4.1.0'
+    compile 'com.typesafe:config:1.3.2'
+    compile 'com.github.kittinunf.result:result:1.2.0'
+
+    compile "com.github.softwareberg.rinca:httpclient:$rinca"
+    compile "com.github.softwareberg.rinca:json:$rinca"
+
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxcoroutines"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$kotlinxcoroutines"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-nio:$kotlinxcoroutines"
 
     testCompile 'junit:junit:4.12'
-    testCompile 'com.nhaarman:mockito-kotlin:1.+'
+    testCompile 'com.natpryce:hamkrest:1.4.2.2'
+    testCompile 'com.nhaarman:mockito-kotlin:1.5.0'
+
+    integrationTestCompile 'com.despegar:spark-test:1.1.5'
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.3'
+    gradleVersion = '4.3'
+    distributionType = 'ALL'
 }
