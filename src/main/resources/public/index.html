@@ -54,6 +54,7 @@
             <label for="tasks">Tasks:</label>
             <textarea name="tasks" class="form-control" rows="10" id="tasks"></textarea>
           </div>
+          <div id="summary"></div>
           <button class="btn cl3-btn btn-primary" onclick="createTempo()"><span id="form-convert-animation" class="glyphicon glyphicon-refresh glyphicon-refresh-animate" style="display: none"></span> <span id="form-convert-text">Submit</span></button>
         </form>
       </div>
@@ -62,6 +63,68 @@
 
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script>
+    function groupBy(xs, key) {
+      return xs.reduce(function (rv, x) {
+        (rv[x[key]] = rv[x[key]] || []).push(x);
+        return rv;
+      }, {});
+    }
+
+    function objectMap(object, mapFn) {
+    return Object.keys(object).reduce(function(result, key) {
+        result[key] = mapFn(object[key])
+        return result
+      }, {})
+    }
+
+    function secondsToHms(d) {
+      var h = Math.floor(d / 3600);
+      var m = Math.floor(d % 3600 / 60);
+      var s = Math.floor(d % 3600 % 60);
+
+      var hDisplay = h > 0 ? h + "h " : "";
+      var mDisplay = m > 0 ? m + "m " : "";
+      var sDisplay = s > 0 ? s + "s " : "";
+      return (hDisplay + mDisplay + sDisplay).trim(); 
+    }
+
+    function parseTasks(tasks) {
+      var lines = tasks.match(/[^\r\n]+/g);
+      var values = lines.map(function (it) { return it.split(/\t/g) });
+      var datesWithSeconds = values.map(function (row) { return { date: row[2], seconds: parseInt(row[3]) } });
+      var secondsByDays = groupBy(datesWithSeconds, 'date');
+      var summedSecondsByDays = objectMap(secondsByDays, function (secondsList) { return secondsList.map(function (it) { return it.seconds; }).reduce(function (a, b) { return a + b; }, 0); });
+      var summedByDays = summedSecondsByDays = objectMap(summedSecondsByDays, function (it) { return secondsToHms(it); });
+      return summedByDays;
+    }
+
+    function createSummaryHtml(tasks) {
+      var $ul = $('<ul/>');
+      for(var key in tasks) {
+        var $li = $('<li/>').text(key + ': ' + tasks[key]);
+        $ul.append($li);
+      }
+      $('#summary').replaceWith($('<div/>').append($('<h4/>').text('Summary:')).append($ul));
+    }
+
+    function showDailyStats() {
+      var $tasks = $("#tasks");
+
+      var input = $tasks.val();
+      if (!input) {
+        return;
+      }
+
+      var tasks = parseTasks(input);
+      createSummaryHtml(tasks);
+      console.log(tasks);
+    }
+
+    $(function () {
+      $("#tasks").on('change keyup paste', showDailyStats);
+    });
+  </script>
   <script>
     function createTempo() {
       var $animation = $('#form-convert-animation');
