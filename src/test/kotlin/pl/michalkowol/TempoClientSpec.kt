@@ -1,8 +1,8 @@
 package pl.michalkowol
 
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.doReturn
-import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
 import com.softwareberg.HttpClient
 import com.softwareberg.HttpResponse
 import org.junit.Assert.assertEquals
