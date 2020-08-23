@@ -5,37 +5,37 @@
 ### Default
 
 ```
-gradle
+./gradlew
 ```
 
 ### Build
 
 ```
-gradle build
+./gradle build
 ```
 
 ### Run
 
 ```
-gradle run
+./gradle run
 ```
 
 ### Continuous build
 
 ```
-gradle run -t
+./gradle run -t
 ```
 
 or
 
 ```
-gradle run --continuous
+./gradle run --continuous
 ```
 
 ### FatJar
 
 ```
-gradle fatJar
+./gradle fatJar
 java -jar build/libs/${NAME}-assembly-${VERSION}.jar
 ```
 
