@@ -61,8 +61,9 @@
     </div>
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js" crossorigin="anonymous"></script>
   <script>
     function groupBy(xs, key) {
       return xs.reduce(function (rv, x) {
@@ -73,7 +74,7 @@
 
     function objectMap(object, mapFn) {
     return Object.keys(object).reduce(function(result, key) {
-        result[key] = mapFn(object[key])
+        result[key] = mapFn(object[key]);
         return result
       }, {})
     }
@@ -92,11 +93,17 @@
     function parseTasks(tasks) {
       var lines = tasks.match(/[^\r\n]+/g);
       var values = lines.map(function (it) { return it.split(/\t/g) });
-      var datesWithSeconds = values.map(function (row) { return { date: row[2], seconds: parseInt(row[3]) } });
+      var datesWithSeconds = values.map(function (row) {
+        var start = moment(row[3], 'HH:mm');
+        var end = moment(row[4], 'HH:mm');
+        var seconds = end.diff(start, 'seconds');
+        return { date: row[2], seconds: seconds };
+      });
       var secondsByDays = groupBy(datesWithSeconds, 'date');
       var summedSecondsByDays = objectMap(secondsByDays, function (secondsList) { return secondsList.map(function (it) { return it.seconds; }).reduce(function (a, b) { return a + b; }, 0); });
-      var summedByDays = summedSecondsByDays = objectMap(summedSecondsByDays, function (it) { return secondsToHms(it); });
-      return summedByDays;
+      return objectMap(summedSecondsByDays, function (it) {
+        return secondsToHms(it);
+      });
     }
 
     function createSummaryHtml(tasks) {
@@ -105,7 +112,7 @@
         var $li = $('<li/>').text(key + ': ' + tasks[key]);
         $ul.append($li);
       }
-      $('#summary').replaceWith($('<div/>').append($('<h4/>').text('Summary:')).append($ul));
+      $('#summary').html($('<div/>').append($('<h4/>').text('Summary:')).append($ul));
     }
 
     function showDailyStats() {
@@ -118,7 +125,6 @@
 
       var tasks = parseTasks(input);
       createSummaryHtml(tasks);
-      console.log(tasks);
     }
 
     $(function () {

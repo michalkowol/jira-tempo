@@ -59,7 +59,7 @@ class TempoClient(private val httpClient: HttpClient) {
     private fun createNewTaskBody(task: Task, username: String): String {
         return """
         {
-            "timeSpentSeconds": ${task.timeInSec},
+            "timeSpentSeconds": ${task.duration.toSeconds()},
             "dateStarted": "${task.date}T00:00:00.000",
             "comment": "${task.comment}",
             "remainingEstimateSeconds": 0,

@@ -9,6 +9,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import pl.michalkowol.jira.Task
 import pl.michalkowol.jira.TempoClient
+import java.time.Duration
 import java.util.concurrent.CompletableFuture
 
 class TempoClientSpec {
@@ -33,7 +34,7 @@ class TempoClientSpec {
         // given
         val username = "user"
         val password = "password"
-        val task = Task(key = "WTAI-774", comment = "Review", date = "2017-01-13", timeInSec = 300)
+        val task = Task(key = "WTAI-774", comment = "Review", date = "2017-01-13", duration = Duration.ofMinutes(5))
         val tempoClient = TempoClient(createHttpClientMock())
 
         // when
