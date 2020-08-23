@@ -1,0 +1,27 @@
+style:
+  UnusedPrivateMember:
+    active: false
+  MaxLineLength:
+    maxLineLength: 160
+  WildcardImport:
+    excludes: ""
+
+potential-bugs:
+  LateinitUsage:
+    excludeAnnotatedProperties: "Column, Value"
+
+comments:
+  UndocumentedPublicClass:
+    active: false
+  UndocumentedPublicFunction:
+    active: false
+  UndocumentedPublicProperty:
+    active: false
+  AbsentOrWrongFileLicense:
+    active: false
+
+formatting:
+  MaximumLineLength:
+    maxLineLength: 160
+  ImportOrdering:
+    active: false

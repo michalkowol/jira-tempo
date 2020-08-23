@@ -9,6 +9,7 @@ import spark.Spark.delete
 import spark.Spark.post
 import java.net.HttpURLConnection.HTTP_NO_CONTENT
 
+@Suppress("ThrowsCount")
 class TempoController(
     private val taskCsvFactory: TaskCsvFactory,
     private val tempo: Tempo
@@ -48,5 +49,4 @@ class TempoController(
         ids.forEach { tempo.delete(username, password, it) }
         return "Deleted ${ids.size} tasks"
     }
-
 }

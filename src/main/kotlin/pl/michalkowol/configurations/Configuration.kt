@@ -12,5 +12,4 @@ object Configuration {
             CommonModule()
         )
     }
-
 }

@@ -14,5 +14,4 @@ class Boot {
         val httpServer = injector.getInstance(HttpServer::class.java)
         httpServer.start()
     }
-
 }

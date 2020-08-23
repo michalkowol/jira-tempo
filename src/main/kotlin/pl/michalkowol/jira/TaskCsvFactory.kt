@@ -1,5 +1,6 @@
 package pl.michalkowol.jira
 
+@Suppress("MagicNumber")
 class TaskCsvFactory {
 
     fun fromCsv(csv: String): List<Task> {
@@ -17,5 +18,4 @@ class TaskCsvFactory {
         val timeInSec = Integer.parseInt(cells[3])
         return Task(key, comment, date, timeInSec)
     }
-
 }

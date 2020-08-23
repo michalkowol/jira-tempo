@@ -18,7 +18,7 @@ class TempoClientSpec {
         // given
         val username = "user"
         val password = "pass"
-        val workflowId = 1018754
+        val workflowId = 1_018_754
         val tempoClient = TempoClient(createHttpClientMock())
 
         // when

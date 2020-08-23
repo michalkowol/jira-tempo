@@ -7,8 +7,5 @@ class Tempo(private val tempoClient: TempoClient) {
         return ids
     }
 
-    fun delete(username: String, password: String, workflowId: Int): Int {
-        return tempoClient.delete(username, password, workflowId)
-    }
-
+    fun delete(username: String, password: String, workflowId: Int): Int = tempoClient.delete(username, password, workflowId)
 }

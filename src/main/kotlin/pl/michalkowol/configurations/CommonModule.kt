@@ -16,15 +16,16 @@ import pl.michalkowol.web.StaticFilesController
 import pl.michalkowol.web.errors.ErrorsController
 import javax.inject.Singleton
 
+@Suppress("TooManyFunctions")
 class CommonModule : AbstractModule() {
 
-    override fun configure() {}
+    override fun configure() {
+        // no-op
+    }
 
     @Singleton
     @Provides
-    private fun provideConfig(): Config {
-        return ConfigFactory.load()
-    }
+    private fun provideConfig(): Config = ConfigFactory.load()
 
     @Singleton
     @Provides
@@ -35,54 +36,38 @@ class CommonModule : AbstractModule() {
 
     @Singleton
     @Provides
-    private fun provideJsonMapper(): JsonMapper {
-        return JsonMapper.create()
-    }
+    private fun provideJsonMapper(): JsonMapper = JsonMapper.create()
 
     @Singleton
     @Provides
-    private fun provideErrorsController(jsonMapper: JsonMapper): ErrorsController {
-        return ErrorsController(jsonMapper)
-    }
+    private fun provideErrorsController(jsonMapper: JsonMapper): ErrorsController = ErrorsController(jsonMapper)
 
     @Singleton
     @Provides
-    private fun provideStaticFilesController(): StaticFilesController {
-        return StaticFilesController()
-    }
+    private fun provideStaticFilesController(): StaticFilesController = StaticFilesController()
 
     @Singleton
     @Provides
-    private fun provideTaskCsvFactory(): TaskCsvFactory {
-        return TaskCsvFactory()
-    }
+    private fun provideTaskCsvFactory(): TaskCsvFactory = TaskCsvFactory()
 
     @Singleton
     @Provides
-    private fun provideHttpClient(): HttpClient {
-        return SimpleHttpClient.create()
-    }
+    private fun provideHttpClient(): HttpClient = SimpleHttpClient.create()
 
     @Singleton
     @Provides
-    private fun provideTempoClient(httpClient: HttpClient): TempoClient {
-        return TempoClient(httpClient)
-    }
+    private fun provideTempoClient(httpClient: HttpClient): TempoClient = TempoClient(httpClient)
 
     @Singleton
     @Provides
-    private fun provideTempo(tempoClient: TempoClient): Tempo {
-        return Tempo(tempoClient)
-    }
+    private fun provideTempo(tempoClient: TempoClient): Tempo = Tempo(tempoClient)
 
     @Singleton
     @Provides
     private fun provideTempoController(
         taskCsvFactory: TaskCsvFactory,
         tempo: Tempo
-    ): TempoController {
-        return TempoController(taskCsvFactory, tempo)
-    }
+    ): TempoController = TempoController(taskCsvFactory, tempo)
 
     @Singleton
     @Provides
@@ -91,13 +76,10 @@ class CommonModule : AbstractModule() {
         errorsController: ErrorsController,
         staticFilesController: StaticFilesController,
         tempoController: TempoController
-    ): HttpServer {
-        return HttpServer(
-            serverConfiguration,
-            errorsController,
-            staticFilesController,
-            tempoController
-        )
-    }
-
+    ): HttpServer = HttpServer(
+        serverConfiguration,
+        errorsController,
+        staticFilesController,
+        tempoController
+    )
 }

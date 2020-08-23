@@ -18,5 +18,4 @@ class HttpServer(
         staticFilesController.start()
         tempoController.start()
     }
-
 }

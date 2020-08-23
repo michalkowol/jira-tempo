@@ -8,6 +8,7 @@ import com.softwareberg.HttpRequest
 import org.slf4j.LoggerFactory
 import java.net.HttpURLConnection.HTTP_OK
 
+@Suppress("UseIfInsteadOfWhen")
 class TempoClient(private val httpClient: HttpClient) {
 
     private val log = LoggerFactory.getLogger(TempoClient::class.java)
@@ -24,7 +25,7 @@ class TempoClient(private val httpClient: HttpClient) {
 
         when (response.statusCode) {
             HTTP_OK -> return workflowId
-            else -> throw Exception("Cannot delete task with worklog [id=$workflowId]")
+            else -> throw TempoException("Cannot delete task with worklog [id=$workflowId]")
         }
     }
 
@@ -44,7 +45,7 @@ class TempoClient(private val httpClient: HttpClient) {
             HTTP_OK -> return response.statusCode
             else -> {
                 log.error("Response: {}", response.toString())
-                throw Exception("Error to create task [task=$task]")
+                throw TempoException("Error to create task [task=$task]")
             }
         }
     }
@@ -71,5 +72,4 @@ class TempoClient(private val httpClient: HttpClient) {
         }
         """.trimIndent()
     }
-
 }

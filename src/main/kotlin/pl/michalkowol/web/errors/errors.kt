@@ -5,7 +5,7 @@ import java.io.StringWriter
 import java.net.HttpURLConnection.HTTP_BAD_REQUEST
 import java.net.HttpURLConnection.HTTP_INTERNAL_ERROR
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
-import java.util.*
+import java.util.UUID
 
 interface ServerError {
     val status: Int
@@ -38,16 +38,12 @@ class InternalServerError(
 
     companion object {
 
-        fun create(ex: Exception): InternalServerError {
-            return InternalServerError(ex.message, extractStackTrace(ex))
-        }
+        fun create(ex: Exception): InternalServerError = InternalServerError(ex.message, extractStackTrace(ex))
 
         private fun extractStackTrace(throwable: Throwable): String {
             val errorMsgWriter = StringWriter()
             throwable.printStackTrace(PrintWriter(errorMsgWriter))
             return errorMsgWriter.toString()
         }
-
     }
-
 }
