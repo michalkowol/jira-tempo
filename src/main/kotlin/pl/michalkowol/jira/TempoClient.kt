@@ -20,7 +20,6 @@ class TempoClient(private val httpClient: HttpClient) {
             "https://jira.mtvi.com/rest/tempo-timesheets/3/worklogs/$workflowId",
             listOf(basicAuthHeader)
         )
-        log.debug("Request: {}", deleteWorkflowRequest)
         val response = httpClient.execute(deleteWorkflowRequest).join()
 
         when (response.statusCode) {
@@ -38,7 +37,6 @@ class TempoClient(private val httpClient: HttpClient) {
             headers,
             body
         )
-        log.debug("Request: {}", createWorkflowRequest)
         val response = httpClient.execute(createWorkflowRequest).join()
 
         when (response.statusCode) {
