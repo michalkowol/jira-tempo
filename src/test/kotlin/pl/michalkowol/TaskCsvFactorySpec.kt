@@ -3,6 +3,7 @@ package pl.michalkowol
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import pl.michalkowol.jira.TaskCsvFactory
+import java.time.format.DateTimeParseException
 
 class TaskCsvFactorySpec {
 
@@ -19,6 +20,30 @@ class TaskCsvFactorySpec {
         assertEquals("comment ok", task.comment)
         assertEquals("2016-08-26", task.date)
         assertEquals(600, task.duration.toSeconds())
+    }
+
+    @Test
+    fun `it should parse one line in csv to task (dates should have prefix 0 - 09_10 instead of 9_10)`() {
+        // given
+        val row = "WTAI-123\tcomment ok\t2016-08-26\t09:10\t13:20"
+
+        // when
+        val task = TaskCsvFactory().fromCsv(row).first()
+
+        // then
+        assertEquals("WTAI-123", task.key)
+        assertEquals("comment ok", task.comment)
+        assertEquals("2016-08-26", task.date)
+        assertEquals(15_000, task.duration.toSeconds())
+    }
+
+    @Test(expected = DateTimeParseException::class)
+    fun `it should fail on tasks without 0 prefix`() {
+        // given
+        val row = "WTAI-123\tcomment ok\t2016-08-26\t9:10\t13:20"
+
+        // when
+        TaskCsvFactory().fromCsv(row)
     }
 
     @Test

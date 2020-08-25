@@ -2,6 +2,7 @@ package pl.michalkowol.jira
 
 import java.time.Duration
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 @Suppress("MagicNumber")
 class TaskCsvFactory {
@@ -18,9 +19,11 @@ class TaskCsvFactory {
         val key = cells[0].split("\\s".toRegex()).first()
         val comment = cells[1]
         val date = cells[2]
-        val start = LocalTime.parse(cells[3])
-        val end = LocalTime.parse(cells[4])
+        val start = parseTime(cells[3])
+        val end = parseTime(cells[4])
         val duration = Duration.between(start, end)
         return Task(key, comment, date, duration)
     }
+
+    private fun parseTime(time: String) = LocalTime.parse(time, DateTimeFormatter.ISO_TIME)
 }

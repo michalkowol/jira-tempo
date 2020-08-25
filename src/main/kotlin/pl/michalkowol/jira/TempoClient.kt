@@ -15,12 +15,14 @@ class TempoClient(private val httpClient: HttpClient) {
 
     fun delete(username: String, password: String, workflowId: Int): Int {
         val basicAuthHeader = HttpHeader.basicAuth(username, password)
-        val deleteWorkflowRequest = HttpRequest(
+        val headers = listOf(basicAuthHeader)
+        val request = HttpRequest(
             DELETE,
             "https://jira.mtvi.com/rest/tempo-timesheets/3/worklogs/$workflowId",
-            listOf(basicAuthHeader)
+            headers
         )
-        val response = httpClient.execute(deleteWorkflowRequest).join()
+        val response = httpClient.execute(request).join()
+        log.debug("TempoClient [request={}, response={}]", request.copy(headers = listOf()), response.toString())
 
         when (response.statusCode) {
             HTTP_OK -> return workflowId
@@ -29,29 +31,22 @@ class TempoClient(private val httpClient: HttpClient) {
     }
 
     fun create(username: String, password: String, task: Task): Int {
+        val basicAuthHeader = HttpHeader.basicAuth(username, password)
         val body = createNewTaskBody(task, username)
-        val headers = createNewTaskHeaders(username, password)
-        val createWorkflowRequest = HttpRequest(
+        val headers = listOf(basicAuthHeader, HttpHeader("Content-Type", "application/json"))
+        val request = HttpRequest(
             POST,
             "https://jira.mtvi.com/rest/tempo-timesheets/3/worklogs",
             headers,
             body
         )
-        val response = httpClient.execute(createWorkflowRequest).join()
+        val response = httpClient.execute(request).join()
+        log.debug("TempoClient [request={}, response={}]", request.copy(headers = listOf()), response.toString())
 
         when (response.statusCode) {
             HTTP_OK -> return response.statusCode
-            else -> {
-                log.error("Response: {}", response.toString())
-                throw TempoException("Error to create task [task=$task]")
-            }
+            else -> throw TempoException("Error to create task [task=$task]")
         }
-    }
-
-    private fun createNewTaskHeaders(username: String, password: String): List<HttpHeader> {
-        val basicAuthHeader = HttpHeader.basicAuth(username, password)
-        val contentType = HttpHeader("Content-Type", "application/json")
-        return listOf(basicAuthHeader, contentType)
     }
 
     private fun createNewTaskBody(task: Task, username: String): String {
