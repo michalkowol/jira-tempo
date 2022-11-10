@@ -9,36 +9,25 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import pl.michalkowol.jira.Task
 import pl.michalkowol.jira.TempoClient
-import java.time.Duration
+import java.time.ZonedDateTime
 import java.util.concurrent.CompletableFuture
 
 class TempoClientSpec {
 
     @Test
-    fun `it should delete task by id`() {
-        // given
-        val username = "user"
-        val password = "pass"
-        val workflowId = 1_018_754
-        val tempoClient = TempoClient(createHttpClientMock())
-
-        // when
-        val deletedId = tempoClient.delete(username, password, workflowId)
-
-        // then
-        assertEquals(workflowId, deletedId)
-    }
-
-    @Test
     fun `it should create new task`() {
         // given
-        val username = "user"
-        val password = "password"
-        val task = Task(key = "WTAI-774", comment = "Review", date = "2017-01-13", duration = Duration.ofMinutes(5))
+        val cookie = "cookie"
+        val task = Task(
+            key = "WTAI-774",
+            comment = "Review",
+            start = ZonedDateTime.parse("2017-01-13T13:00:00Z"),
+            end = ZonedDateTime.parse("2017-01-13T14:00:00Z")
+        )
         val tempoClient = TempoClient(createHttpClientMock())
 
         // when
-        val createId = tempoClient.create(username, password, task)
+        val createId = tempoClient.create(task, cookie)
 
         // then
         assertEquals(200, createId)

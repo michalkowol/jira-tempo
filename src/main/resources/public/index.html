@@ -43,12 +43,11 @@
       <div class="col-md-12">
         <form id="jiraForm" onsubmit="return false;">
           <div class="form-group">
-            <label for="username">Username:</label>
-            <input name="username" class="form-control" id="username">
-          </div>
-          <div class="form-group">
-            <label for="pwd">Password:</label>
-            <input name="password" type="password" class="form-control" id="pwd">
+            <label for="cookie">Cookie:</label>
+            <input name="cookie" type="text" class="form-control" id="cookie">
+            <div class="alert alert-info" style="margin-top: 3px" role="alert">
+              ℹ️ To get Cookie open <a class="alert-link" href="https://network-streaming.atlassian.net/rest/api/2/issue/EDEN-3206/worklog">this</a> and copy Cookie Header from Developer Tools > Network
+            </div>
           </div>
           <div class="form-group">
             <label for="tasks">Tasks:</label>

@@ -2,67 +2,62 @@ package pl.michalkowol.jira
 
 import com.softwareberg.HttpClient
 import com.softwareberg.HttpHeader
-import com.softwareberg.HttpMethod.DELETE
 import com.softwareberg.HttpMethod.POST
 import com.softwareberg.HttpRequest
 import org.slf4j.LoggerFactory
+import java.net.HttpURLConnection.HTTP_CREATED
 import java.net.HttpURLConnection.HTTP_OK
+import java.time.Duration
+import java.time.format.DateTimeFormatter
 
-@Suppress("UseIfInsteadOfWhen")
 class TempoClient(private val httpClient: HttpClient) {
 
     private val log = LoggerFactory.getLogger(TempoClient::class.java)
 
-    fun delete(username: String, password: String, workflowId: Int): Int {
-        val basicAuthHeader = HttpHeader.basicAuth(username, password)
-        val headers = listOf(basicAuthHeader)
-        val request = HttpRequest(
-            DELETE,
-            "https://jira.mtvi.com/rest/tempo-timesheets/3/worklogs/$workflowId",
-            headers
+    fun create(task: Task, cookie: String): Int {
+        val body = createNewTaskBody(task)
+        val headers = listOf(
+            HttpHeader("Content-Type", "application/json"),
+            HttpHeader("Cookie", cookie)
         )
-        val response = httpClient.execute(request).join()
-        log.debug("TempoClient [request={}, response={}]", request.copy(headers = listOf()), response.toString())
-
-        when (response.statusCode) {
-            HTTP_OK -> return workflowId
-            else -> throw TempoException("Cannot delete task with worklog [id=$workflowId]")
-        }
-    }
-
-    fun create(username: String, password: String, task: Task): Int {
-        val basicAuthHeader = HttpHeader.basicAuth(username, password)
-        val body = createNewTaskBody(task, username)
-        val headers = listOf(basicAuthHeader, HttpHeader("Content-Type", "application/json"))
         val request = HttpRequest(
             POST,
-            "https://jira.mtvi.com/rest/tempo-timesheets/3/worklogs",
+            "https://network-streaming.atlassian.net/rest/api/3/issue/${task.key}/worklog",
             headers,
             body
         )
         val response = httpClient.execute(request).join()
-        log.debug("TempoClient [request={}, response={}]", request.copy(headers = listOf()), response.toString())
-
-        when (response.statusCode) {
-            HTTP_OK -> return response.statusCode
+        log.debug("TempoClient [request={}, response={}]", request, response)
+        return when (response.statusCode) {
+            HTTP_OK, HTTP_CREATED -> response.statusCode
             else -> throw TempoException("Error to create task [task=$task]")
         }
     }
 
-    private fun createNewTaskBody(task: Task, username: String): String {
+    private fun createNewTaskBody(task: Task): String {
         return """
         {
-            "timeSpentSeconds": ${task.duration.toSeconds()},
-            "dateStarted": "${task.date}T00:00:00.000",
-            "comment": "${task.comment}",
-            "remainingEstimateSeconds": 0,
-            "author": {
-                "name": "$username"
-            },
-            "issue": {
-                "key": "${task.key}"
+            "timeSpentSeconds": ${formatTaskSeconds(task)},
+            "started": "${formatStarted(task)}",
+            "comment": {
+                "type": "doc",
+                "version": 1,
+                "content": [
+                    {
+                        "type": "paragraph",
+                        "content": [
+                            {
+                                "text": "${task.comment}",
+                                "type": "text"
+                            }
+                        ]
+                    }
+                ]
             }
         }
         """.trimIndent()
     }
+
+    private fun formatTaskSeconds(task: Task): Long = Duration.between(task.start, task.end).toSeconds()
+    private fun formatStarted(task: Task): String = task.start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ"))
 }
