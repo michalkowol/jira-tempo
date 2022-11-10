@@ -1,5 +1,5 @@
 package pl.michalkowol.jira
 
-import java.time.Duration
+import java.time.ZonedDateTime
 
-data class Task(val key: String, val comment: String, val date: String, val duration: Duration)
+data class Task(val key: String, val comment: String, val start: ZonedDateTime, val end: ZonedDateTime)

@@ -18,8 +18,8 @@ class TaskCsvFactorySpec {
         // then
         assertEquals("WTAI-123", task.key)
         assertEquals("comment ok", task.comment)
-        assertEquals("2016-08-26", task.date)
-        assertEquals(600, task.duration.toSeconds())
+        assertEquals("2016-08-26T13:10-04:00[America/New_York]", task.start.toString())
+        assertEquals("2016-08-26T13:20-04:00[America/New_York]", task.end.toString())
     }
 
     @Test
@@ -33,8 +33,8 @@ class TaskCsvFactorySpec {
         // then
         assertEquals("WTAI-123", task.key)
         assertEquals("comment ok", task.comment)
-        assertEquals("2016-08-26", task.date)
-        assertEquals(15_000, task.duration.toSeconds())
+        assertEquals("2016-08-26T09:10-04:00[America/New_York]", task.start.toString())
+        assertEquals("2016-08-26T13:20-04:00[America/New_York]", task.end.toString())
     }
 
     @Test(expected = DateTimeParseException::class)
@@ -57,8 +57,8 @@ class TaskCsvFactorySpec {
         // then
         assertEquals("WTAI-123", task.key)
         assertEquals("comment, ok", task.comment)
-        assertEquals("2016-08-26", task.date)
-        assertEquals(600, task.duration.toSeconds())
+        assertEquals("2016-08-26T12:00-04:00[America/New_York]", task.start.toString())
+        assertEquals("2016-08-26T12:10-04:00[America/New_York]", task.end.toString())
     }
 
     @Test
@@ -72,9 +72,8 @@ class TaskCsvFactorySpec {
         // then
         assertEquals("WTAI-123", task.key)
         assertEquals("comment ok", task.comment)
-
-        assertEquals("2016-08-26", task.date)
-        assertEquals(600, task.duration.toSeconds())
+        assertEquals("2016-08-26T12:00-04:00[America/New_York]", task.start.toString())
+        assertEquals("2016-08-26T12:10-04:00[America/New_York]", task.end.toString())
     }
 
     @Test
@@ -88,8 +87,7 @@ class TaskCsvFactorySpec {
         // then
         assertEquals("WTAI-681", task.key)
         assertEquals("comment ok", task.comment)
-
-        assertEquals("2016-08-26", task.date)
-        assertEquals(600, task.duration.toSeconds())
+        assertEquals("2016-08-26T12:00-04:00[America/New_York]", task.start.toString())
+        assertEquals("2016-08-26T12:10-04:00[America/New_York]", task.end.toString())
     }
 }

@@ -1,7 +1,9 @@
 package pl.michalkowol.jira
 
-import java.time.Duration
+import java.time.LocalDate
 import java.time.LocalTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 @Suppress("MagicNumber")
@@ -19,11 +21,16 @@ class TaskCsvFactory {
         val key = cells[0].split("\\s".toRegex()).first()
         val comment = cells[1]
         val date = cells[2]
-        val start = parseTime(cells[3])
-        val end = parseTime(cells[4])
-        val duration = Duration.between(start, end)
-        return Task(key, comment, date, duration)
+        val startTime = cells[3]
+        val endTime = cells[4]
+        val start = parseAsZonedDatetime(date, startTime)
+        val end = parseAsZonedDatetime(date, endTime)
+        return Task(key, comment, start, end)
     }
 
-    private fun parseTime(time: String) = LocalTime.parse(time, DateTimeFormatter.ISO_TIME)
+    private fun parseAsZonedDatetime(dateText: String, timeText: String): ZonedDateTime {
+        val date = LocalDate.parse(dateText, DateTimeFormatter.ISO_DATE)
+        val time = LocalTime.parse(timeText, DateTimeFormatter.ISO_TIME)
+        return ZonedDateTime.of(date, time, ZoneId.of("America/New_York"))
+    }
 }
