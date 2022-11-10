@@ -43,7 +43,7 @@ java -jar build/libs/${NAME}-assembly-${VERSION}.jar
 
 ### Heroku
 
-```
+```sh
 heroku login
 heroku create
 git push heroku master
