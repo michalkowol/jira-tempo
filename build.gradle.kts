@@ -46,8 +46,8 @@ dependencies {
     implementation("com.typesafe:config:1.4.0")
     implementation("com.github.kittinunf.result:result:3.0.0")
 
-    implementation("com.github.softwareberg.rinca:httpclient:0.12.0")
-    implementation("com.github.softwareberg.rinca:json:0.12.0")
+    implementation("com.github.softwareberg.rinca:httpclient:0.13.0")
+    implementation("com.github.softwareberg.rinca:json:0.13.0")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0-M2")
 
