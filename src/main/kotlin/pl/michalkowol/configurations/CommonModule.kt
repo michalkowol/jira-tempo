@@ -7,6 +7,8 @@ import com.softwareberg.JsonMapper
 import com.softwareberg.SimpleHttpClient
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
+import org.asynchttpclient.Dsl.asyncHttpClient
+import org.asynchttpclient.Dsl.config
 import pl.michalkowol.jira.TaskCsvFactory
 import pl.michalkowol.jira.Tempo
 import pl.michalkowol.jira.TempoClient
@@ -52,7 +54,7 @@ class CommonModule : AbstractModule() {
 
     @Singleton
     @Provides
-    private fun provideHttpClient(): HttpClient = SimpleHttpClient.create()
+    private fun provideHttpClient(): HttpClient = SimpleHttpClient(asyncHttpClient(config().setCookieStore(null).build()))
 
     @Singleton
     @Provides
