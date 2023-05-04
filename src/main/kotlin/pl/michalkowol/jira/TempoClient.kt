@@ -22,7 +22,7 @@ class TempoClient(private val httpClient: HttpClient) {
         )
         val request = HttpRequest(
             POST,
-            "https://network-streaming.atlassian.net/rest/api/3/issue/${task.key}/worklog",
+            "https://paramount.atlassian.net/rest/api/3/issue/${task.key}/worklog",
             headers,
             body
         )
