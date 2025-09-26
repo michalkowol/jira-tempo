@@ -1,6 +1,8 @@
 # Stage 1: Build
-FROM eclipse-temurin:21-alpine AS builder
-RUN ./gradlew assemble
+FROM gradle:8-jdk21-alpine AS builder
+COPY . /app
+WORKDIR /app
+RUN gradle assemble --no-daemon
 
 # Stage 2: Runtime
 FROM eclipse-temurin:21-alpine
