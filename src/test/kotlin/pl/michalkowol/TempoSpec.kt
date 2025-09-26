@@ -1,15 +1,13 @@
 package pl.michalkowol
 
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.mock
-import org.junit.Assert.assertEquals
-import org.junit.Test
+
 import pl.michalkowol.jira.Task
 import pl.michalkowol.jira.Tempo
-import pl.michalkowol.jira.TempoClient
+
 import java.time.ZonedDateTime
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+import pl.michalkowol.jira.JiraRepository
 
 class TempoSpec {
 
@@ -23,9 +21,7 @@ class TempoSpec {
         // given
         val cookie = "cookie"
         val tasks = listOf(taskA, taskB, taskC)
-        val tempoClient = mock<TempoClient> {
-            on { create(any(), eq(cookie)) } doReturn 200
-        }
+        val tempoClient = JiraRepository(JiraHttpWebClientFake())
         val tempo = Tempo(tempoClient)
 
         // when
@@ -41,9 +37,7 @@ class TempoSpec {
         // given
         val cookie = "cookie"
         val tasks = listOf(taskA, taskNT, taskB, taskC)
-        val tempoClient = mock<TempoClient> {
-            on { create(any(), eq(cookie)) } doReturn 200
-        }
+        val tempoClient = JiraRepository(JiraHttpWebClientFake())
         val tempo = Tempo(tempoClient)
 
         // when

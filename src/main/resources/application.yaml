@@ -1,0 +1,19 @@
+server.port: 8080
+
+spring:
+  application:
+    name: eden-research
+  threads.virtual:
+    enabled: true
+
+app:
+  web:
+    jira-url: https://paramount.atlassian.net
+
+logging:
+  #structured.format.console: ecs
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    tech.paramount: DEBUG
+

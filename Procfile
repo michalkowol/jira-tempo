@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -jar build/libs/*assembly*.jar
+web: java $JAVA_OPTS -jar build/libs/app.jar

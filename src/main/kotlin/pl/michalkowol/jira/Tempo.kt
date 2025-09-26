@@ -1,10 +1,13 @@
 package pl.michalkowol.jira
 
-class Tempo(private val tempoClient: TempoClient) {
+import org.springframework.stereotype.Component
+
+@Component
+class Tempo(private val jiraRepository: JiraRepository) {
 
     fun logTasks(tasks: List<Task>, cookie: String): List<Int> {
         return tasks
             .filterNot { task -> task.key == "NT" }
-            .map { task -> tempoClient.create(task, cookie) }
+            .map { task -> jiraRepository.create(task, cookie) }
     }
 }

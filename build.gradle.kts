@@ -1,59 +1,51 @@
 plugins {
-    java
-    application
-    id("io.gitlab.arturbosch.detekt") version "1.7.4"
-    id("eu.codeloop.kotlin") version "2.2.6.0"
+    id("org.springframework.boot") version "3.5.6"
+    id("io.spring.dependency-management") version "1.1.7"
+    kotlin("jvm") version "2.2.20"
+    kotlin("plugin.spring") version "2.2.20"
 }
 
-defaultTasks("run")
+group = "eu.codeloop"
+version = "0.0.1-SNAPSHOT"
 
-application {
-    mainClassName = "pl.michalkowol.BootKt"
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 repositories {
-    jcenter()
-    maven {
-        url = uri("https://jitpack.io")
+    mavenCentral()
+}
+
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll("-Xjsr305=strict")
     }
 }
 
-tasks.register<Jar>("fatJar") {
-    archiveBaseName.set("${project.name}-assembly")
-    manifest {
-        attributes["Main-Class"] = application.mainClassName
-    }
-    from(configurations.runtimeClasspath.get().map({ if (it.isDirectory) it else zipTree(it) }))
-    with(tasks.jar.get() as CopySpec)
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
+tasks.jar {
+    enabled = false
+}
+
+tasks.bootJar {
+    archiveFileName = "app.jar"
 }
 
 tasks.register("stage") {
-    dependsOn(tasks.check, "fatJar")
-}
-
-project.afterEvaluate {
-    detekt {
-        config = files("detekt.yml")
-    }
+    dependsOn(tasks.check, tasks.assemble)
 }
 
 dependencies {
-    implementation("org.slf4j:slf4j-api:1.7.30")
-    implementation("ch.qos.logback:logback-classic:1.2.3")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
-    implementation("com.sparkjava:spark-core:2.9.1")
-    implementation("com.google.inject:guice:4.2.2")
-    implementation("com.typesafe:config:1.4.0")
-    implementation("com.github.kittinunf.result:result:3.0.0")
-
-    implementation("com.github.softwareberg.rinca:httpclient:0.13.0")
-    implementation("com.github.softwareberg.rinca:json:0.13.0")
-
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0-M2")
-
-    testImplementation("junit:junit:4.13")
-    testImplementation("com.natpryce:hamkrest:1.7.0.2")
-    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
-
-    testImplementation("com.despegar:spark-test:1.1.8")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.28.1")
 }
