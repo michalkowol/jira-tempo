@@ -1,7 +1,5 @@
 # Stage 1: Build
 FROM eclipse-temurin:21-alpine AS builder
-WORKDIR /app
-COPY . .
 RUN ./gradlew assemble
 
 # Stage 2: Runtime
