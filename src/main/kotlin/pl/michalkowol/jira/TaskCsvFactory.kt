@@ -5,8 +5,9 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import org.springframework.stereotype.Component
 
-@Suppress("MagicNumber")
+@Component
 class TaskCsvFactory {
 
     fun fromCsv(csv: String): List<Task> {

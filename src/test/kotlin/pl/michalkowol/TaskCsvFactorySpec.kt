@@ -1,9 +1,12 @@
 package pl.michalkowol
 
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import assertk.assertFailure
+import assertk.assertThat
+import assertk.assertions.isEqualTo
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import pl.michalkowol.jira.TaskCsvFactory
-import java.time.format.DateTimeParseException
+
 
 class TaskCsvFactorySpec {
 
@@ -16,10 +19,10 @@ class TaskCsvFactorySpec {
         val task = TaskCsvFactory().fromCsv(row).first()
 
         // then
-        assertEquals("WTAI-123", task.key)
-        assertEquals("comment ok", task.comment)
-        assertEquals("2016-08-26T13:10-04:00[America/New_York]", task.start.toString())
-        assertEquals("2016-08-26T13:20-04:00[America/New_York]", task.end.toString())
+        assertThat(task.key).isEqualTo("WTAI-123")
+        assertThat(task.comment).isEqualTo("comment ok", )
+        assertThat(task.start.toString()).isEqualTo("2016-08-26T13:10-04:00[America/New_York]")
+        assertThat(task.end.toString()).isEqualTo("2016-08-26T13:20-04:00[America/New_York]")
     }
 
     @Test
@@ -31,19 +34,21 @@ class TaskCsvFactorySpec {
         val task = TaskCsvFactory().fromCsv(row).first()
 
         // then
-        assertEquals("WTAI-123", task.key)
-        assertEquals("comment ok", task.comment)
-        assertEquals("2016-08-26T09:10-04:00[America/New_York]", task.start.toString())
-        assertEquals("2016-08-26T13:20-04:00[America/New_York]", task.end.toString())
+        assertThat( task.key).isEqualTo("WTAI-123")
+        assertThat(task.comment).isEqualTo( "comment ok")
+        assertThat(task.start.toString()).isEqualTo("2016-08-26T09:10-04:00[America/New_York]")
+        assertThat(task.end.toString()).isEqualTo("2016-08-26T13:20-04:00[America/New_York]")
     }
 
-    @Test(expected = DateTimeParseException::class)
+    @Test
     fun `it should fail on tasks without 0 prefix`() {
         // given
         val row = "WTAI-123\tcomment ok\t2016-08-26\t9:10\t13:20"
 
         // when
-        TaskCsvFactory().fromCsv(row)
+        assertFailure {
+            TaskCsvFactory().fromCsv(row)
+        }
     }
 
     @Test

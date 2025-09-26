@@ -1,17 +1,15 @@
 package pl.michalkowol
 
-import pl.michalkowol.configurations.Configuration
-import pl.michalkowol.web.HttpServer
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan
+import org.springframework.boot.runApplication
 
-fun main() {
-    Boot().start()
+@ConfigurationPropertiesScan
+@SpringBootApplication
+class EdenApplication
+
+@Suppress("SpreadOperator")
+fun main(args: Array<String>) {
+    runApplication<EdenApplication>(*args)
 }
 
-class Boot {
-
-    fun start() {
-        val injector = Configuration.injector
-        val httpServer = injector.getInstance(HttpServer::class.java)
-        httpServer.start()
-    }
-}
