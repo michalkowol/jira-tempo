@@ -8,4 +8,5 @@ RUN ./gradlew assemble --no-daemon
 FROM eclipse-temurin:17-alpine
 COPY --from=builder /app/build/libs/app.jar /app.jar
 EXPOSE 8080
+EXPOSE 10000
 CMD ["sh", "-c", "exec java -Dserver.port=${PORT:-8080} -jar /app.jar"]
