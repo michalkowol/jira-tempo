@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS -jar target/jira-temp-*.jar
+web: java -Dserver.port=$PORT $JAVA_OPTS -jar  target/jira-temp-*.jar
