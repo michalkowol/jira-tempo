@@ -1,0 +1,24 @@
+POST localhost:8080/api/v1/nip/bulk-check
+Content-Type: application/json
+Accept: application/json
+
+{
+  "data": [
+    "6312640250"
+  ]
+}
+
+###
+
+POST localhost:8080/api/v1/nip/bulk-check
+Content-Type: application/json
+Accept: application/json
+
+{
+  "data": [
+    "6312640250",
+    "5242914404"
+  ]
+}
+
+###
