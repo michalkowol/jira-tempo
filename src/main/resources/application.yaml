@@ -9,6 +9,9 @@ spring:
 app:
   web:
     jira-url: https://paramount.atlassian.net
+    regon-url: https://wyszukiwarkaregon.stat.gov.pl
+  regon:
+    api-key: ${REGON_API_KEY:abcde12345abcde12345}
 
 logging:
   #structured.format.console: ecs
