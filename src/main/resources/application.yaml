@@ -5,6 +5,27 @@ spring:
     name: eden-research
   threads.virtual:
     enabled: true
+  ai:
+    mcp:
+      server:
+        name: nip-server
+        version: 0.0.1
+        type: async
+        capabilities:
+          tool: true
+          resource: false
+          prompt: false
+          completion: false
+        protocol: streamable
+        streamable-http:
+          mcp-endpoint: /mcp
+
+management:
+  info.git:
+    enabled: true
+    mode: full
+  endpoints:
+    web.exposure.include: ${MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE:*}
 
 app:
   web:
@@ -13,10 +34,10 @@ app:
   regon:
     api-key: ${REGON_API_KEY:abcde12345abcde12345}
 
+
 logging:
   #structured.format.console: ecs
   level:
     root: INFO
     org.springframework.web: DEBUG
     tech.paramount: DEBUG
-
