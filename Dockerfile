@@ -9,4 +9,6 @@ FROM eclipse-temurin:21-alpine
 COPY --from=builder /app/build/libs/app.jar /app.jar
 EXPOSE 8080
 EXPOSE 10000
-CMD ["sh", "-c", "exec java -Dserver.port=${PORT:-8080} -jar /app.jar"]
+ENV JDK_JAVA_OPTIONS="-XX:+UseG1GC"
+ENV SERVER_PORT=${PORT:-8080}
+CMD ["sh", "-c", "exec java -jar /app.jar"]
