@@ -42,7 +42,7 @@ tasks.register("stage") {
 
 dependencyManagement {
     imports {
-        mavenBom("org.springframework.ai:spring-ai-bom:1.1.0")
+        mavenBom("org.springframework.ai:spring-ai-bom:1.1.1")
     }
 }
 
