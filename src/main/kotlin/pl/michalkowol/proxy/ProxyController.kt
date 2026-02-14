@@ -28,7 +28,7 @@ class ProxyController(private val restClient: RestClient) {
         val targetUrl = "https://$originalHost$path"
         val forwardedHeaders = HttpHeaders(headers)
         forwardedHeaders.remove("X-Original-Host")
-        forwardedHeaders.replace("Host", listOf(originalHost))
+        forwardedHeaders.set("Host", originalHost)
         return try {
             restClient.post()
                 .uri(targetUrl)
