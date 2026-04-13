@@ -38,7 +38,7 @@ app:
 
 
 logging:
-  #structured.format.console: ecs
+  structured.format.console: ecs
   level:
     root: INFO
     org.springframework.web: DEBUG
