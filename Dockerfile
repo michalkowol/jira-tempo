@@ -3,7 +3,7 @@ FROM gradle:9.1.0-jdk21-alpine AS builder
 WORKDIR /app
 
 COPY build.gradle.kts settings.gradle.kts ./
-RUN gradle dependencies --no-daemon --configuration runtimeClasspath || true
+RUN gradle dependencies --no-daemon --configuration runtimeClasspath
 
 COPY src ./src
 RUN gradle bootJar --no-daemon
