@@ -24,10 +24,16 @@ COPY --from=layers --chown=app:app /builder/extracted/spring-boot-loader/ ./
 COPY --from=layers --chown=app:app /builder/extracted/snapshot-dependencies/ ./
 COPY --from=layers --chown=app:app /builder/extracted/application/ ./
 
+ADD --chown=app:app https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v2.26.1/opentelemetry-javaagent.jar opentelemetry-javaagent.jar
+
 USER app
 
 HEALTHCHECK --interval=10s --timeout=3s --start-period=5s --retries=3 CMD wget -q --spider http://localhost:8080/actuator/health || exit 1
 
 ENV JDK_JAVA_OPTIONS="-XX:MaxRAMPercentage=75.0"
 ENV SERVER_PORT=8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+
+ENV OTEL_SERVICE_NAME=jira-tempo
+ENV OTEL_EXPORTER_OTLP_ENDPOINT=http://lgtm:4318
+
+ENTRYPOINT ["java", "-javaagent:opentelemetry-javaagent.jar", "-jar", "app.jar"]
