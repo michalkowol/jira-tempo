@@ -5,6 +5,8 @@ spring:
     name: eden-research
   threads.virtual:
     enabled: true
+  mvc.problemdetails:
+    enabled: true
   ai:
     mcp:
       server:
