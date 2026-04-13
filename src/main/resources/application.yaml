@@ -40,4 +40,4 @@ logging:
   level:
     root: INFO
     org.springframework.web: DEBUG
-    tech.paramount: DEBUG
+    pl.michalkowol: DEBUG
