@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component
 @Component
 class JiraRepository(private val client: JiraWebClient) {
 
+    
     fun create(task: Task, cookie: String): Int {
         val body = createNewTaskBody(task)
         val response = client.sendWorklog(
