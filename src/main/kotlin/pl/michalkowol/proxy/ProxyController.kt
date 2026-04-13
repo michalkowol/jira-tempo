@@ -29,15 +29,11 @@ class ProxyController(private val restClient: RestClient) {
         val forwardedHeaders = HttpHeaders(headers)
         forwardedHeaders.remove("X-Original-Host")
         forwardedHeaders.set("Host", originalHost)
-        return try {
-            restClient.post()
-                .uri(targetUrl)
-                .headers { it.addAll(forwardedHeaders) }
-                .body(body ?: "")
-                .retrieve()
-                .toEntity(String::class.java)
-        } catch (e: Exception) {
-            ResponseEntity.status(500).body("Error forwarding request: ${e.message}")
-        }
+        return restClient.post()
+            .uri(targetUrl)
+            .headers { it.addAll(forwardedHeaders) }
+            .body(body ?: "")
+            .retrieve()
+            .toEntity(String::class.java)
     }
 }
