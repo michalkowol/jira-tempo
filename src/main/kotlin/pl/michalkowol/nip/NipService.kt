@@ -50,7 +50,7 @@ class NipService(
         return try {
             val xmlContent = extractXmlFromMultipart(response)
             val root = xmlMapper.readTree(xmlContent)
-            root.path("Body").path("ZalogujResponse").path("ZalogujResult").asText()
+            root.path("Body").path("ZalogujResponse").path("ZalogujResult").asString()
                 .takeIf { it.isNotBlank() }
                 ?: throw NoLoginResultException()
         } catch (e: Exception) {
@@ -87,7 +87,7 @@ class NipService(
         return try {
             val xmlContent = extractXmlFromMultipart(soapResponse)
             val root = xmlMapper.readTree(xmlContent)
-            root.path("Body").path("DaneSzukajPodmiotyResponse").path("DaneSzukajPodmiotyResult").asText()
+            root.path("Body").path("DaneSzukajPodmiotyResponse").path("DaneSzukajPodmiotyResult").asString()
                 .replace("&lt;", "<")
                 .replace("&gt;", ">")
                 .replace("&#xD;", "")
@@ -108,22 +108,22 @@ class NipService(
             val root = xmlMapper.readArray(cleanXmlData)
             root.map { companyNode ->
                 CompanyInfo(
-                    regon = companyNode.path("Regon").asText(""),
-                    nip = companyNode.path("Nip").asText(""),
-                    nipStatus = companyNode.path("StatusNip").asText("").takeIf { it.isNotBlank() },
-                    name = companyNode.path("Nazwa").asText(""),
-                    voivodeship = companyNode.path("Wojewodztwo").asText(""),
-                    county = companyNode.path("Powiat").asText(""),
-                    commune = companyNode.path("Gmina").asText(""),
-                    city = companyNode.path("Miejscowosc").asText(""),
-                    postalCode = companyNode.path("KodPocztowy").asText(""),
-                    street = companyNode.path("Ulica").asText(""),
-                    buildingNumber = companyNode.path("NrNieruchomosci").asText(""),
-                    apartmentNumber = companyNode.path("NrLokalu").asText("").takeIf { it.isNotBlank() },
-                    type = companyNode.path("Typ").asText(""),
-                    silosId = companyNode.path("SilosID").asText(""),
-                    businessEndDate = companyNode.path("DataZakonczeniaDzialalnosci").asText("").takeIf { it.isNotBlank() },
-                    postalCity = companyNode.path("MiejscowoscPoczty").asText("")
+                    regon = companyNode.path("Regon").asString(""),
+                    nip = companyNode.path("Nip").asString(""),
+                    nipStatus = companyNode.path("StatusNip").asString("").takeIf { it.isNotBlank() },
+                    name = companyNode.path("Nazwa").asString(""),
+                    voivodeship = companyNode.path("Wojewodztwo").asString(""),
+                    county = companyNode.path("Powiat").asString(""),
+                    commune = companyNode.path("Gmina").asString(""),
+                    city = companyNode.path("Miejscowosc").asString(""),
+                    postalCode = companyNode.path("KodPocztowy").asString(""),
+                    street = companyNode.path("Ulica").asString(""),
+                    buildingNumber = companyNode.path("NrNieruchomosci").asString(""),
+                    apartmentNumber = companyNode.path("NrLokalu").asString("").takeIf { it.isNotBlank() },
+                    type = companyNode.path("Typ").asString(""),
+                    silosId = companyNode.path("SilosID").asString(""),
+                    businessEndDate = companyNode.path("DataZakonczeniaDzialalnosci").asString("").takeIf { it.isNotBlank() },
+                    postalCity = companyNode.path("MiejscowoscPoczty").asString("")
                 )
             }
         } catch (_: Exception) {
