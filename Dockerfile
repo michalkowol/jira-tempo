@@ -19,14 +19,13 @@ FROM eclipse-temurin:21-jre-alpine
 RUN addgroup -S app && adduser -S app -G app
 WORKDIR /application
 
-COPY --from=layers /builder/extracted/dependencies/ ./
-COPY --from=layers /builder/extracted/spring-boot-loader/ ./
-COPY --from=layers /builder/extracted/snapshot-dependencies/ ./
-COPY --from=layers /builder/extracted/application/ ./
+COPY --from=layers --chown=app:app /builder/extracted/dependencies/ ./
+COPY --from=layers --chown=app:app /builder/extracted/spring-boot-loader/ ./
+COPY --from=layers --chown=app:app /builder/extracted/snapshot-dependencies/ ./
+COPY --from=layers --chown=app:app /builder/extracted/application/ ./
 
 USER app
-EXPOSE 8080
 
-ENV JDK_JAVA_OPTIONS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -Dfile.encoding=UTF-8"
-
-CMD ["sh", "-c", "exec java -jar application.jar --server.port=${PORT:-8080}"]
+ENV JDK_JAVA_OPTIONS="-XX:MaxRAMPercentage=75.0"
+ENV SERVER_PORT=8080
+ENTRYPOINT ["java", "-jar", "application.jar"]
