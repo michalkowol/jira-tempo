@@ -11,8 +11,8 @@ RUN gradle bootJar --no-daemon
 # Stage 2: Extract Spring Boot layers
 FROM eclipse-temurin:21-jre-alpine AS layers
 WORKDIR /builder
-COPY --from=builder /app/build/libs/app.jar application.jar
-RUN java -Djarmode=tools -jar application.jar extract --layers --destination extracted
+COPY --from=builder /app/build/libs/app.jar app.jar
+RUN java -Djarmode=tools -jar app.jar extract --layers --destination extracted
 
 # Stage 3: Runtime
 FROM eclipse-temurin:21-jre-alpine
@@ -28,4 +28,4 @@ USER app
 
 ENV JDK_JAVA_OPTIONS="-XX:MaxRAMPercentage=75.0"
 ENV SERVER_PORT=8080
-ENTRYPOINT ["java", "-jar", "application.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
