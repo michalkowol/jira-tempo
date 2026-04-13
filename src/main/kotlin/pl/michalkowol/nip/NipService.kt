@@ -1,7 +1,5 @@
 package pl.michalkowol.nip
 
-import org.springframework.ai.tool.annotation.Tool
-import org.springframework.ai.tool.annotation.ToolParam
 import org.springframework.stereotype.Component
 import pl.michalkowol.nip.JacksonXmlConfiguration.CustomXmlMapper
 
@@ -11,11 +9,6 @@ class NipService(
     private val regonProperties: RegonProperties,
     private val xmlMapper: CustomXmlMapper
 ) {
-
-    @Tool(description = "Check company information by NIP (Polish Tax Identification Number). Supports bulk requests.")
-    fun checkNipsBulkMcpAdapter(@ToolParam(description = "List of NIPs (Polish Tax Identification Number)") nips: List<String>): List<CompanyInfo> {
-        return checkNipsBulk(nips.map { Nip(it) })
-    }
 
     fun checkNipsBulk(nips: List<Nip>): List<CompanyInfo> {
         val sessionId = login()
