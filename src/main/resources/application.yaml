@@ -7,20 +7,6 @@ spring:
     enabled: true
   mvc.problemdetails:
     enabled: true
-  ai:
-    mcp:
-      server:
-        name: nip-server
-        version: 0.0.1
-        type: async
-        capabilities:
-          tool: true
-          resource: false
-          prompt: false
-          completion: false
-        protocol: streamable
-        streamable-http:
-          mcp-endpoint: /mcp
 
 management:
   info.git:

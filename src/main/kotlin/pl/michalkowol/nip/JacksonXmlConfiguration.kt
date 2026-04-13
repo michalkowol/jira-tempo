@@ -3,16 +3,16 @@ package pl.michalkowol.nip
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter
 
 @Configuration(proxyBeanMethods = false)
 class JacksonXmlConfiguration {
 
     @Bean
-    fun xmlMapper(converter: MappingJackson2XmlHttpMessageConverter): CustomXmlMapper {
-        return CustomXmlMapper(converter.objectMapper)
+    fun customXmlMapper(): CustomXmlMapper {
+        return CustomXmlMapper(XmlMapper())
     }
 
     class CustomXmlMapper(val objectMapper: ObjectMapper) {
