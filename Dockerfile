@@ -26,6 +26,8 @@ COPY --from=layers --chown=app:app /builder/extracted/application/ ./
 
 USER app
 
+HEALTHCHECK --interval=10s --timeout=3s --start-period=5s --retries=3 CMD curl -f http://localhost:8080/actuator/health || exit 1
+
 ENV JDK_JAVA_OPTIONS="-XX:MaxRAMPercentage=75.0"
 ENV SERVER_PORT=8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
