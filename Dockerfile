@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM gradle:9.1.0-jdk21-alpine AS builder
+FROM gradle:9.5.1-jdk25-alpine AS builder
 WORKDIR /app
 
 COPY build.gradle.kts settings.gradle.kts ./
@@ -9,13 +9,13 @@ COPY src ./src
 RUN gradle bootJar --no-daemon
 
 # Stage 2: Extract Spring Boot layers
-FROM eclipse-temurin:21-jre-alpine AS layers
+FROM eclipse-temurin:25-jre-alpine AS layers
 WORKDIR /builder
 COPY --from=builder /app/build/libs/app.jar app.jar
 RUN java -Djarmode=tools -jar app.jar extract --layers --destination extracted
 
 # Stage 3: Runtime
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:25-jre-alpine
 RUN addgroup -S app && adduser -S app -G app
 WORKDIR /application
 
