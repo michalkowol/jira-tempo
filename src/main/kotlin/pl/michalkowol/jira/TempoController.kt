@@ -1,5 +1,6 @@
 package pl.michalkowol.jira
 
+import org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -14,7 +15,7 @@ class TempoController(
     private val tempo: Tempo
 ) {
 
-    @PostMapping("/worklogFromForm")
+    @PostMapping("/worklogFromForm", consumes = [APPLICATION_FORM_URLENCODED_VALUE])
     fun worklogFromForm(@RequestParam cookie: String, @RequestParam tasks: String): ResponseEntity<Void> {
         val tasksList = taskCsvFactory.fromCsv(tasks)
         tempo.logTasks(tasksList, cookie)
