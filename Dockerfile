@@ -3,10 +3,12 @@ FROM gradle:9.5.1-jdk25-alpine AS builder
 WORKDIR /app
 
 COPY build.gradle.kts settings.gradle.kts ./
-RUN gradle dependencies --no-daemon --configuration runtimeClasspath
+RUN --mount=type=cache,target=/home/gradle/.gradle \
+    gradle dependencies --no-daemon --configuration runtimeClasspath
 
 COPY src ./src
-RUN gradle bootJar --no-daemon
+RUN --mount=type=cache,target=/home/gradle/.gradle \
+    gradle bootJar --no-daemon
 
 # Stage 2: Extract Spring Boot layers
 FROM eclipse-temurin:25-jre-alpine AS layers
@@ -19,12 +21,12 @@ FROM eclipse-temurin:25-jre-alpine
 RUN addgroup -S app && adduser -S app -G app
 WORKDIR /application
 
+ADD --chown=app:app https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v2.26.1/opentelemetry-javaagent.jar opentelemetry-javaagent.jar
+
 COPY --from=layers --chown=app:app /builder/extracted/dependencies/ ./
 COPY --from=layers --chown=app:app /builder/extracted/spring-boot-loader/ ./
 COPY --from=layers --chown=app:app /builder/extracted/snapshot-dependencies/ ./
 COPY --from=layers --chown=app:app /builder/extracted/application/ ./
-
-ADD --chown=app:app https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v2.26.1/opentelemetry-javaagent.jar opentelemetry-javaagent.jar
 
 USER app
 
