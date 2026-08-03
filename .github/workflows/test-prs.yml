@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup gradle
-        uses: gradle/actions/setup-gradle@v6
+        uses: gradle/actions/setup-gradle@v6.2.0
 
       - name: Run gradle check
         run: ./gradlew clean check
