@@ -54,6 +54,7 @@
             <textarea name="tasks" class="form-control" rows="10" id="tasks"></textarea>
           </div>
           <div id="summary"></div>
+          <div id="error"></div>
           <button class="btn cl3-btn btn-primary" onclick="createTempo()"><span id="form-convert-animation" class="glyphicon glyphicon-refresh glyphicon-refresh-animate" style="display: none"></span> <span id="form-convert-text">Submit</span></button>
         </form>
       </div>
@@ -131,11 +132,22 @@
     });
   </script>
   <script>
+    function showError(jqXHR) {
+      var problem = jqXHR.responseJSON || {};
+      var title = problem.title || jqXHR.statusText || 'Error on sending';
+      var detail = problem.detail || jqXHR.responseText || 'No details available';
+      var $alert = $('<div class="alert alert-danger" role="alert" style="margin-top: 3px"/>')
+        .append($('<h4/>').text(jqXHR.status + ' ' + title))
+        .append($('<div/>').css('white-space', 'pre-wrap').text(detail));
+      $('#error').html($alert);
+    }
+
     function createTempo() {
       var $animation = $('#form-convert-animation');
       var $btnText = $('#form-convert-text');
       $animation.show();
       $btnText.text('Sending...');
+      $('#error').empty();
 
       var input = $('#jiraForm').serialize();
       jQuery.ajax({
@@ -145,9 +157,7 @@
       }).always(function () {
         $animation.hide();
         $btnText.text('Submit');
-      }).fail(function () {
-        alert("Error on sending...")
-      });
+      }).fail(showError);
     }
   </script>
 </body>
