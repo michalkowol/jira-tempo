@@ -3,18 +3,29 @@ package pl.michalkowol.jira
 import java.time.Duration
 import java.time.format.DateTimeFormatter
 import org.springframework.stereotype.Component
+import org.springframework.web.client.RestClientResponseException
 
 @Component
 class JiraRepository(private val client: JiraWebClient) {
 
     fun create(task: Task, cookie: String): Int {
         val body = createNewTaskBody(task)
-        val response = client.sendWorklog(
-            taskKey = task.key,
-            cookie = cookie,
-            body = body
-        )
-        return response.statusCode.value()
+        try {
+            val response = client.sendWorklog(
+                taskKey = task.key,
+                cookie = cookie,
+                body = body
+            )
+            return response.statusCode.value()
+        } catch (e: RestClientResponseException) {
+            throw JiraWorklogException(
+                taskKey = task.key,
+                status = e.statusCode.value(),
+                responseBody = e.responseBodyAsString,
+                requestBody = body,
+                cause = e
+            )
+        }
     }
 
     private fun createNewTaskBody(task: Task): String {

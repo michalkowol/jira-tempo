@@ -6,6 +6,7 @@ import org.springframework.http.ProblemDetail
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
+import pl.michalkowol.jira.JiraWorklogException
 import pl.michalkowol.nip.NipServiceException
 
 @RestControllerAdvice
@@ -17,6 +18,19 @@ class ErrorHandler : ResponseEntityExceptionHandler() {
     fun handleNipServiceException(ex: NipServiceException): ProblemDetail {
         log.error("NIP service error [message={}]", ex.message, ex)
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_GATEWAY, ex.message ?: "NIP service error")
+    }
+
+    @ExceptionHandler(JiraWorklogException::class)
+    fun handleJiraWorklogException(ex: JiraWorklogException): ProblemDetail {
+        log.error(
+            "Jira worklog error [taskKey={}, status={}, response={}, request={}]",
+            ex.taskKey,
+            ex.status,
+            ex.responseBody,
+            ex.requestBody,
+            ex
+        )
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_GATEWAY, ex.message ?: "Jira worklog error")
     }
 
     @ExceptionHandler(IllegalArgumentException::class)
